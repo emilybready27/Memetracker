@@ -1,8 +1,20 @@
 #include <fstream>
 #include <iostream>
+#include "avltree.h"
 #include <vector>
 
 using namespace std;
+
+double get_timestamp_seconds(std::string & time_stamp) {
+
+          istringstream timestamp(time_stamp);
+          tm tmb;
+          double r;
+          timestamp >> get_time(&tmb, "%Y-%m-%d %T") >> r;    
+
+          return r;
+
+}
 
 int main(int argc, const char** argv) {
     //First, let's get the phrase we want to search for:
@@ -47,9 +59,19 @@ int main(int argc, const char** argv) {
                 }
             }
         }
+        AVLTree avltree;
         for (vector<string> data: quotes) {
-            cout<<data[0]<<endl<<data[1]<<endl<<endl;
+            double time_stamp = get_timestamp_seconds(data[1]);
+            avltree.insert(time_stamp, data[0]);
+
         }
+        avltree.getInorderTraversal();
     }
 
 }
+
+
+
+
+
+
