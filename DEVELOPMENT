@@ -4,3 +4,9 @@ This is the first log of our DEVELOPMENT file, I suppose Deborah & Zwaadul will 
 They will be taking care of sorting our data into a tree of sorts - this will use some sort of
 BFS, DFS, Djistrka's Algorithm, etc.
 Until then, cheerio!
+
+Wednesday, November 25th
+Zawaadul and I added a custom AVLTree class suited to our purposes. We added a function for converting the string
+timestamp format into a double and added code to the main function which should add all the elements in the vector
+of phrase matches into an AVLTree. Our compiling issues are back (don't know what to do about that), so we don't
+know if it will run properly, but we did as much debugging as we could given the circumstances. - Deborah
