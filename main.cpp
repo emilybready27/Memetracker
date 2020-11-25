@@ -6,16 +6,17 @@ using namespace std;
 
 int main(int argc, const char** argv) {
     //First, let's get the phrase we want to search for:
-    string input = "";
+    string input;
     cout<<"Please input the phrase you want to search: " << endl;
-    cin >> input;
+    getline(cin, input);
     //Then we'll open up the file we're searching in.
-    string file = "";
-    cout<<"Please input the phrase you want to search: " << endl;
+    string file;
+    cout<< "Please input the name of the file that you want to search through: " << endl;
     cin >> file;
     vector<vector<string> > quotes = vector<vector<string> >();
     ifstream infile;
     infile.open (file);
+    cout<< "Searching..." << endl;
     //Now that we have these two, let's begin sifting.
     if (infile.is_open()) {
         vector<string> data = vector<string>();  //Let's make a data vector to store our time and place.
@@ -39,7 +40,7 @@ int main(int argc, const char** argv) {
             } else if (line.at(0) == 'Q') {
                 //If we have 'Q', we found a quote! Check if:
                 //(A) the line matches our target and (B) it's not akin to another one in the same block.
-                if (input == line && !found) {
+                if ("Q	" + input == line && !found) {
                     //If those two ring true, send this block to our list of matches and set found to true. 
                     quotes.push_back(data);
                     found = true;
