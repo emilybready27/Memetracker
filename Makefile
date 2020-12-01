@@ -1,18 +1,21 @@
 EXENAME = main
-OBJS = main.o
+OBJS = main.o searcher.o
 
 CXX = clang++
 CXXFLAGS = $(CS225) -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
 LD = clang++
 LDFLAGS = -std=c++1y -stdlib=libc++ -lc++abi -lm
 
-all: $(EXENAME)
+all : $(EXENAME)
 
-$(EXENAME): $(OBJS)
-    $(LD) $^ $(LDFLAGS) -o $@
+$(EXENAME) : $(OBJS)
+	$(LD) $(OBJS) $(LDFLAGS) -o $(EXENAME)
 
-main.o: main.cpp
-    $(CXX) $< $(CXXFLAGS)
+main.o : main.cpp searcher.h
+	$(CXX) $(CXXFLAGS) main.cpp
 
-clean:
-    -rm -f *.o $(EXENAME)
+searcher.o : searcher.cpp searcher.h
+	$(CXX) $(CXXFLAGS) searcher.cpp
+
+clean :
+	-rm -f *.o $(EXENAME)
