@@ -1,5 +1,5 @@
 EXENAME = main
-OBJS = main.o searcher.o
+OBJS = main.o searcher.o avltree.o
 
 CXX = clang++
 CXXFLAGS = $(CS225) -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
@@ -11,11 +11,14 @@ all : $(EXENAME)
 $(EXENAME) : $(OBJS)
 	$(LD) $(OBJS) $(LDFLAGS) -o $(EXENAME)
 
-main.o : main.cpp searcher.h
+main.o : main.cpp
 	$(CXX) $(CXXFLAGS) main.cpp
 
 searcher.o : searcher.cpp searcher.h
 	$(CXX) $(CXXFLAGS) searcher.cpp
+
+avltree.o: avltree.h avltree.cpp
+	$(CXX) $< $(CXXFLAGS)
 
 clean :
 	-rm -f *.o $(EXENAME)
