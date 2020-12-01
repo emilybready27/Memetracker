@@ -4,15 +4,18 @@
  * Definitions of the binary tree functions you'll be writing for this lab.
  * You'll need to modify this file.
  */
-
+ 
 #include <queue>
-using namespace std;
+#include "avltree.h"
 
+
+using namespace std;
+ 
 std::string AVLTree::find(double& timestamp) 
 {
     return find(root, timestamp);
 }
-
+ 
 std::string AVLTree::find(Node* subtree, double& timestamp) 
 {
     if (subtree == NULL)
@@ -26,8 +29,8 @@ std::string AVLTree::find(Node* subtree, double& timestamp)
             return find(subtree->right, timestamp);
     }
 }
-
-
+ 
+ 
 void AVLTree::rotateLeft(Node*& t)
 {
     Node * replace_node = t->right;
@@ -37,18 +40,18 @@ void AVLTree::rotateLeft(Node*& t)
     t = replace_node;
     t->height = 1 + max(heightOrNeg1(t->left), heightOrNeg1(t->right));
 }
-
+ 
 void AVLTree::rotateLeftRight(Node*& t)
 {
-
+ 
     // Implemented for you:
     rotateLeft(t->left);
     rotateRight(t);
 }
-
+ 
 void AVLTree::rotateRight(Node*& t)
 {
-
+ 
     // your code here
     Node * replace_node = t->left;
     t->left = replace_node->right;
@@ -57,21 +60,21 @@ void AVLTree::rotateRight(Node*& t)
     t = replace_node;
     t->height = 1 + max(heightOrNeg1(t->left), heightOrNeg1(t->right));
 }
-
+ 
 void AVLTree::rotateRightLeft(Node*& t)
 {
     // your code here
     rotateRight(t->right);
     rotateLeft(t);
 }
-
+ 
 void AVLTree::rebalance(Node*& subtree)
 {
     if (subtree == NULL) {
         return;
     }
-
-
+ 
+ 
     if ((heightOrNeg1(subtree->right) - heightOrNeg1(subtree->left)) == -2) {
         if ((heightOrNeg1(subtree->left->right) - heightOrNeg1(subtree->left->left)) < 0) { 
             rotateRight(subtree);
@@ -80,9 +83,9 @@ void AVLTree::rebalance(Node*& subtree)
             rotateLeftRight(subtree);
         }
     }
-
+ 
     if ((heightOrNeg1(subtree->right) - heightOrNeg1(subtree->left)) == 2) {
-
+ 
         if ((heightOrNeg1(subtree->right->right) - heightOrNeg1(subtree->right->left)) > 0) { 
             rotateLeft(subtree);
         }
@@ -91,12 +94,12 @@ void AVLTree::rebalance(Node*& subtree)
         }
     }
 }
-
+ 
 void AVLTree::insert(double & timestamp,  std::string & url)
 {
     insert(root, timestamp , url);
 }
-
+ 
 void AVLTree::insert(Node*& subtree, double& timestamp,  std::string& url)
 {
     if (subtree == NULL) {
@@ -115,17 +118,17 @@ void AVLTree::insert(Node*& subtree, double& timestamp,  std::string& url)
     rebalance(subtree);
     subtree->height = 1 + max(heightOrNeg1(subtree->left), heightOrNeg1(subtree->right));
 }
-
+ 
 void AVLTree::remove(double& timestamp)
 {
     remove(root, timestamp);
 }
-
+ 
 void AVLTree::remove(Node*& subtree, double& timestamp)
 {
     if (subtree == NULL)
         return;
-
+ 
     if (timestamp < subtree->timestamp) {
         // your code here
         remove(subtree->left,timestamp);
@@ -152,7 +155,7 @@ void AVLTree::remove(Node*& subtree, double& timestamp)
             subtree->url = temp->url;
             remove(subtree->left, temp->timestamp);
         } else {
-
+ 
             Node *temp;
             if(subtree->left!=NULL)
             {
@@ -160,7 +163,7 @@ void AVLTree::remove(Node*& subtree, double& timestamp)
                 *subtree = *temp;
                 delete temp;
                 temp = NULL;
-            
+ 
             }
             else if(subtree->right!=NULL)
             {
@@ -168,38 +171,38 @@ void AVLTree::remove(Node*& subtree, double& timestamp)
                 *subtree = *temp;
                 delete temp;
                 temp = NULL;
-
+ 
             }
         }
     }
     rebalance(subtree);
 }
-
-
+ 
+ 
 AVLTree::AVLTree()
     : root(NULL), _out(&std::cout)
 {
-    
+ 
 }
-
+ 
 AVLTree::AVLTree( AVLTree& other)
     : root(copy(other.root)), _out(&std::cout)
 {
-
+ 
 }
-
+ 
 AVLTree::~AVLTree()
 {
     clear(root);
 }
-
+ 
 std::vector<double> AVLTree::getInorderTraversal() 
 {
     std::vector<double> traversal;
     getInorderTraversal(root, traversal);
     return traversal;
 }
-
+ 
 void AVLTree::getInorderTraversal( Node* subRoot, std::vector<double>& traversal) 
 {
     if (subRoot == NULL) {
@@ -209,14 +212,14 @@ void AVLTree::getInorderTraversal( Node* subRoot, std::vector<double>& traversal
     traversal.push_back(subRoot->timestamp);
     getInorderTraversal(subRoot->right, traversal);
 }
-
+ 
 std::vector<double> AVLTree::getPreorderTraversal() 
 {
     std::vector<double> traversal;
     getPreorderTraversal(root, traversal);
     return traversal;
 }
-
+ 
 void AVLTree::getPreorderTraversal( Node* subRoot, std::vector<double>& traversal) 
 {
     if (subRoot == NULL) {
@@ -226,9 +229,9 @@ void AVLTree::getPreorderTraversal( Node* subRoot, std::vector<double>& traversa
     getPreorderTraversal(subRoot->left, traversal);
     getPreorderTraversal(subRoot->right, traversal);
 }
-
-
-
+ 
+ 
+ 
 AVLTree& AVLTree::operator=( AVLTree& rhs)
 {
     if (this != &rhs) {
@@ -237,35 +240,35 @@ AVLTree& AVLTree::operator=( AVLTree& rhs)
     }
     return *this;
 }
-
+ 
 void AVLTree::clear()
 {
     clear(root);
     root = NULL;
 }
-
+ 
 typename AVLTree::Node* AVLTree::copy(Node* subRoot)
 {
     if (subRoot == NULL)
         return NULL;
-
+ 
     // Copy this node and its children
     Node* newNode = new Node(subRoot->timestamp, subRoot->url);
     newNode->left = copy(subRoot->left);
     newNode->right = copy(subRoot->right);
     return newNode;
 }
-
+ 
 void AVLTree::clear(Node* subRoot)
 {
     if (subRoot == NULL)
         return;
-
+ 
     clear(subRoot->left);
     clear(subRoot->right);
     delete subRoot;
 }
-
+ 
 void AVLTree::swap(Node*& first, Node*& second)
 {
     double temptimestamp = first->timestamp;
@@ -275,9 +278,24 @@ void AVLTree::swap(Node*& first, Node*& second)
     second->timestamp = temptimestamp;
     second->url = tempurl;
 }
-
+ 
+int AVLTree::heightOrNeg1(Node* node)
+{
+    if (node == NULL)
+        return -1;
+    else
+        return node->height;
+}
+ 
+/*void AVLTree::print(std::ostream& out, bool order)
+{
+    if(order)
+        printFunctionOrder(out);
+    printTree(AVLTreeNodeDescriptor<Node>(root), out);
+}*/
+ 
 // class for generic printing
-
+ 
 /*template <typename Node>
 class AVLTreeNodeDescriptor
     : public GenericNodeDescriptor<AVLTreeNodeDescriptor<Node>>
@@ -290,14 +308,14 @@ class AVLTreeNodeDescriptor
     {
         return subRoot == NULL;
     }
-
+ 
     std::string key() const
     {
         std::stringstream ss;
         ss << subRoot->key;
         return ss.str();
     }
-
+ 
     AVLTreeNodeDescriptor left() const
     {
         return AVLTreeNodeDescriptor(subRoot->left);
@@ -306,11 +324,11 @@ class AVLTreeNodeDescriptor
     {
         return AVLTreeNodeDescriptor(subRoot->right);
     }
-
+ 
   private:
     const Node* subRoot;
 };
-
+ 
 template <class K, class V>
 void AVLTree<K, V>::printFunctionOrder(std::ostream& out) const
 {
@@ -318,30 +336,10 @@ void AVLTree<K, V>::printFunctionOrder(std::ostream& out) const
         out << functionCalls[i] << std::endl;
     }
 }
-
-template <class K, class V>
-void AVLTree<K, V>::print(std::ostream& out, bool order) const
-{
-    if(order)
-        printFunctionOrder(out);
-    printTree(AVLTreeNodeDescriptor<Node>(root), out);
-}
-
-template <class K, class V>
-int AVLTree<K, V>::heightOrNeg1(const Node* node) const
-{
-    if (node == NULL)
-        return -1;
-    else
-        return node->height;
-}
-
-template <class K, class V>
+ 
+/*template <class K, class V>
 void AVLTree<K, V>::setOutput(std::ostream& newOut)
 {
     _out = &newOut;
 }
 */
-
-
-

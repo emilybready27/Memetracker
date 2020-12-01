@@ -1,12 +1,20 @@
 Tuesday, November 24th
-Emily & I finished working on the code for data entry, and we successfully got it to run with a proper makefile.
-This is the first log of our DEVELOPMENT file, I suppose Deborah & Zwaadul will have the next say here.
-They will be taking care of sorting our data into a tree of sorts - this will use some sort of
-BFS, DFS, Djistrka's Algorithm, etc.
-Until then, cheerio!
+Emily & I finished working on the code for data entry, and we successfully got it to run 
+with a proper makefile. This is the first log of our DEVELOPMENT file, I suppose Deborah & Zwaadul 
+will have the next say here. They will be taking care of sorting our data into a tree of sorts - 
+this will use some sort of BFS, DFS, Djistrka's Algorithm, etc.
+Until then, cheerio! - Matthew
 
 Wednesday, November 25th
-Zawaadul and I added a custom AVLTree class suited to our purposes. We added a function for converting the string
-timestamp format into a double and added code to the main function which should add all the elements in the vector
-of phrase matches into an AVLTree. Our compiling issues are back (don't know what to do about that), so we don't
-know if it will run properly, but we did as much debugging as we could given the circumstances. - Deborah
+Zawaadul and I added a custom AVLTree class suited to our purposes. We added a function for converting 
+the string timestamp format into a double and added code to the main function which should add all 
+the elements in the vector of phrase matches into an AVLTree. Our compiling issues are back 
+(don't know what to do about that), so we don't know if it will run properly, 
+but we did as much debugging as we could given the circumstances. - Deborah
+
+Monday, November 30th
+All of us came together to get the segment finder working after some issues with the Makefile. 
+We finally got the segment finder to work at full capacity, and even with a new, larger test file,
+the program outputs what we want almost instantaneously.
+Now we have to make the graph of multiple sets of results - best of luck to Deborah and Zwaadul!
+~Matthew

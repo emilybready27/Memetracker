@@ -11,14 +11,14 @@ all : $(EXENAME)
 $(EXENAME) : $(OBJS)
 	$(LD) $(OBJS) $(LDFLAGS) -o $(EXENAME)
 
-main.o : main.cpp
+main.o : main.cpp avltree.h searcher.h
 	$(CXX) $(CXXFLAGS) main.cpp
 
 searcher.o : searcher.cpp searcher.h
 	$(CXX) $(CXXFLAGS) searcher.cpp
 
 avltree.o: avltree.h avltree.cpp
-	$(CXX) $< $(CXXFLAGS)
+	$(CXX) $< $(CXXFLAGS) avltree.cpp
 
 clean :
 	-rm -f *.o $(EXENAME)
