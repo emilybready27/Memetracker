@@ -276,6 +276,21 @@ void AVLTree::swap(Node*& first, Node*& second)
     second->url = tempurl;
 }
 
+int AVLTree::heightOrNeg1(Node* node)
+{
+    if (node == NULL)
+        return -1;
+    else
+        return node->height;
+}
+
+/*void AVLTree::print(std::ostream& out, bool order)
+{
+    if(order)
+        printFunctionOrder(out);
+    printTree(AVLTreeNodeDescriptor<Node>(root), out);
+}*/
+
 // class for generic printing
 
 /*template <typename Node>
@@ -319,24 +334,7 @@ void AVLTree<K, V>::printFunctionOrder(std::ostream& out) const
     }
 }
 
-template <class K, class V>
-void AVLTree<K, V>::print(std::ostream& out, bool order) const
-{
-    if(order)
-        printFunctionOrder(out);
-    printTree(AVLTreeNodeDescriptor<Node>(root), out);
-}
-
-template <class K, class V>
-int AVLTree<K, V>::heightOrNeg1(const Node* node) const
-{
-    if (node == NULL)
-        return -1;
-    else
-        return node->height;
-}
-
-template <class K, class V>
+/*template <class K, class V>
 void AVLTree<K, V>::setOutput(std::ostream& newOut)
 {
     _out = &newOut;

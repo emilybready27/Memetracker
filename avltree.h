@@ -29,7 +29,7 @@ class AVLTree
      */
     struct Node {
         double timestamp;
-        std::string  url;
+        std::string url;
         Node* left;
         Node* right;
         int height;
@@ -95,35 +95,35 @@ class AVLTree
      * @param key The element to search for
      * @return The value stored for that key
      */
-    std::string find(double& timestamp) ;
+    std::string find(double& timestamp);
 
     /**
      * Prints the function calls to a stream.
      * @param out The stream to print to (default is stdout)
      */
-    void printFunctionOrder(std::ostream& out = std::cout);
+    // void printFunctionOrder(std::ostream& out = std::cout);
 
     /**
      * Prints the AVLTree to a stream.
      * @param out The stream to print to (default is stdout)
      */
-    void print(std::ostream& out = std::cout, bool order = true) ;
+    // void print(std::ostream& out = std::cout, bool order = true);
 
     /**
      * This function is used for grading.
      * @param newOut The stream to print to
      */
-    void setOutput(std::ostream& newOut);
+    // void setOutput(std::ostream& newOut);
 
     /**
      * Gets the in-order traversal of an AVL tree's keys.
      */
-    std::vector<double> getInorderTraversal() ;
+    std::vector<double> getInorderTraversal();
 
     /**
      * Gets the pre-order traversal of an AVL tree's keys.
      */
-    std::vector<double> getPreorderTraversal() ;
+    std::vector<double> getPreorderTraversal();
 
     
 
@@ -154,7 +154,7 @@ class AVLTree
      * @param key The key to search for
      * @return The value stored for that key
      */
-    std::string find(Node* subtree, double& timestamp) ;
+    std::string find(Node* subtree, double& timestamp);
 
     /**
      * Rotate the tree right (there is an imbalance on the left side).
@@ -196,7 +196,7 @@ class AVLTree
      * @param node The node's height to check
      * @return The height of the node if it's non-`NULL` or -1 if it is `NULL`
      */
-    int heightOrNeg1( Node* subtree) ;
+    int heightOrNeg1(Node* node);
 
     /**
      * Swap the keys and values of two nodes.
@@ -221,13 +221,13 @@ class AVLTree
      * Gets the in-order traversal of an AVL tree's keys.
      * @param subRoot The current node in the recursion
      */
-    void getInorderTraversal( Node* subRoot, std::vector<double>& traversal);
+    void getInorderTraversal(Node* subRoot, std::vector<double>& traversal);
 
     /**
      * Gets the pre-order traversal of an AVL tree's keys.
      * @param subRoot The current node in the recursion
      */
-    void getPreorderTraversal( Node* subRoot, std::vector<double>& traversal);
+    void getPreorderTraversal(Node* subRoot, std::vector<double>& traversal);
 
     /** This variable is used for grading. */
     std::ostream* _out;

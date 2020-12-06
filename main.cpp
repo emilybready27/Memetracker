@@ -65,7 +65,10 @@ int main(int argc, const char** argv) {
             avltree.insert(time_stamp, data[0]);
 
         }
-        avltree.getInorderTraversal();
+        std::vector<double> inOrderTraversal = avltree.getInorderTraversal();
+        for (double timestamp : inOrderTraversal) {
+            std::cout << timestamp << std::endl;
+        }
     }
 
 }
