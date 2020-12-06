@@ -3,6 +3,7 @@
 #include "avltree.h"
 #include <vector>
 #include "searcher.h"
+#include "graph.h"
 
 using namespace std;
 
@@ -11,67 +12,14 @@ double get_timestamp_seconds(std::string & time_stamp) {
     istringstream timestamp(time_stamp);
     tm tmb;
     double r;
-    timestamp >> get_time(&tmb, "%Y-%m-%d %T") >> r;    
-    auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+    timestamp >> get_time(&tmb, "%Y-%m-%d %T");    
+    auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tmb));
+    r = tp.time_since_epoch().count();
     return r;
 
 }
 
-int main(int argc, const char** argv) {
-    //First, let's get the phrase we want to search for:
-    std::string input;
-    cout<<"Please input the phrase you want to search: " << endl;
-    getline(cin, input);
-    //Then we'll open up the file we're searching in.
-    std::string file;
-    cout<< "Please input the name of the file that you want to search through: " << endl;
-    cin >> file;
-<<<<<<< HEAD
-    vector<vector<string> > quotes = vector<vector<string> >();
-    ifstream infile;
-    infile.open (file);
-    cout<< "Searching..." << endl;
-    //Now that we have these two, let's begin sifting.
-    if (infile.is_open()) {
-        vector<string> data = vector<string>();  //Let's make a data vector to store our time and place.
-        string line; //And this is the line in the file.
-        bool found = false; //This bool helps make sure no duplicates occur.
-        while (getline(infile, line)) {
-            //Let's read every line in the document...
-            if (line == "") {
-                //If the line is empty, we exited a block and should clear the data.
-                vector<string> data = vector<string>();
-                continue;
-            }
-            if (line.at(0) == 'P') {
-                //If the line starts with 'P', we entered a new block: pull the link...
-                data.push_back(line.substr(2, line.size()));
-                //...and reset our found boolean to false.
-                found = false;
-            } else if (line.at(0) == 'T') {
-                //If we have a 'T', we need to input the timestamp into our data.
-                data.push_back(line.substr(2, line.size()));
-            } else if (line.at(0) == 'Q') {
-                //If we have 'Q', we found a quote! Check if:
-                //(A) the line matches our target and (B) it's not akin to another one in the same block.
-                if ("Q	" + input == line && !found) {
-                    //If those two ring true, send this block to our list of matches and set found to true. 
-                    quotes.push_back(data);
-                    found = true;
-                }
-            }
-        }
-        AVLTree avltree;
-        for (vector<string> data: quotes) {
-            double time_stamp = get_timestamp_seconds(data[1]);
-            avltree.insert(time_stamp, data[0]);
-
-        }
-        std::vector<double> inOrderTraversal = avltree.getInorderTraversal();
-        for (double timestamp : inOrderTraversal) {
-            std::cout << timestamp << std::endl;
-        }
-=======
+AVLTree & makeTree(std::string input, std::string file) {
     std::vector<std::vector<std::string> > result = search(input, file);
     //Trees start here
     AVLTree avltree;
@@ -79,11 +27,30 @@ int main(int argc, const char** argv) {
         double time_stamp = get_timestamp_seconds(data[1]);
         avltree.insert(time_stamp, data[0]);
     }
-    std::vector<double> inOrderTraversal = avltree.getInorderTraversal();
-    for (double timestamp : inOrderTraversal) {
-        std::cout << avltree.find(timestamp) << std::endl;
->>>>>>> fdef20ac42233f6cd1adbbf2d605133b852787bd
+    return avltree;
+}
+
+int main(int argc, const char** argv) {
+    // //First, let's get the phrase we want to search for:
+    // std::string input;
+    // cout<<"Please input the phrase you want to search: " << endl;
+    // getline(cin, input);
+    // //Then we'll open up the file we're searching in.
+    // std::string file;
+    // cout<< "Please input the name of the file that you want to search through: " << endl;
+    // cin >> file;
+    Graph g(false);
+    std::vector<std::string> phrases;
+    phrases.push_back("activity");
+    phrases.push_back("priority");
+    phrases.push_back("position");
+    phrases.push_back("business ");
+    for (auto it = phrases.begin(); it != phrases.end(); ++it) {
+        AVLTree a = makeTree(*it, "large_test_file.txt");
+        std::vector<double> inOrderTraversal = a.getInorderTraversal();
+        for (double timestamp : inOrderTraversal) {
+            std::cout << a.find(timestamp) << std::endl;
+            g.insertVertex(a.find(timestamp));
+        }
     }
-
-
 }
