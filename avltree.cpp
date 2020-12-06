@@ -102,6 +102,7 @@ void AVLTree::insert(double & timestamp,  std::string & url)
  
 void AVLTree::insert(Node*& subtree, double& timestamp,  std::string& url)
 {
+    cout << timestamp << endl;
     if (subtree == NULL) {
         subtree = new Node(timestamp, url);
     }
@@ -110,8 +111,7 @@ void AVLTree::insert(Node*& subtree, double& timestamp,  std::string& url)
     }
     else if (timestamp > subtree->timestamp) {
         insert(subtree->right, timestamp, url);
-    }
-    else if (timestamp == subtree->timestamp) {
+    } else if (timestamp == subtree->timestamp) {
         subtree->url = url;
         return;
     }
