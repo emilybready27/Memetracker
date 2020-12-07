@@ -16,7 +16,7 @@ Monday, November 30th
 All of us came together to get the segment finder working after some issues with the Makefile. 
 We finally got the segment finder to work at full capacity, and even with a new, larger test file,
 the program outputs what we want almost instantaneously.
-Now we have to make the graph of multiple sets of results - best of luck to Deborah and Zwaadul!
+Now we have to make the graph of multiple sets of results - best of luck to Deborah and Zawaadul!
 ~Matthew
 
 Saturday, December 5th
@@ -24,3 +24,17 @@ We all started to plan for the next steps in implementing our graph.
 We decided on a way to fix the problem with our timestamps, which are impossibly small, in order
 to accurately fetch the data used to sort in our AVL trees. Then we started to work on turning
 the data in our AVL tree into a graph using the URL's as nodes. - Emily
+
+Sunday, December 6th
+
+We managed to resolve the issue with our timestamps; thus, our AVL Tree's keys are accurately represented now.
+We decided to switch the control of choosing words for our AVL Tree from the user's standpoint to the developer's standpoint.
+We were successfully able to create a graph class to represent data in our AVL tree.
+We are currently getting a segmentation fault 11 error, indicating a memory out of space. Thus, our next task would be to resolve this and successfully build a graph. - Zawaadul
+
+Tuesday, December 7th
+
+Our assumption turned out be right: one of the word outputted immense number of urls, causing memory to run out of space.
+We successfully resolved the issue by utilizing pointers to efficiently use memory space.
+We were successfully able to build  a graph from the data in our AVL tree.
+Our next step would be to implement Dijkstra's algoritm- Zawaadul
