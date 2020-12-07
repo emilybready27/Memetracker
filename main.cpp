@@ -19,14 +19,15 @@ double get_timestamp_seconds(std::string & time_stamp) {
 
 }
 
-AVLTree & makeTree(std::string input, std::string file) {
+AVLTree *& makeTree(std::string input, std::string file) {
     std::vector<std::vector<std::string> > result = search(input, file);
     //Trees start here
-    AVLTree avltree;
+    AVLTree *avltree = new AVLTree();
     for (vector<string> data: result) {
         double time_stamp = get_timestamp_seconds(data[1]);
-        avltree.insert(time_stamp, data[0]);
+        avltree->insert(time_stamp, data[0]);
     }
+    std::cout << "lol";
     return avltree;
 }
 
@@ -41,16 +42,51 @@ int main(int argc, const char** argv) {
     // cin >> file;
     Graph g(false);
     std::vector<std::string> phrases;
+    std::vector<std::vector<std::string>> word1 = search("activity" , "large_test_file");
+    std::vector<std::vector<std::string>> word2 = search("priority" , "large_test_file");
+    std::vector<std::vector<std::string>> word3 = search("position" , "large_test_file");
+    std::vector<std::vector<std::string>> word4 = search("business " , "large_test_file");
     phrases.push_back("activity");
     phrases.push_back("priority");
     phrases.push_back("position");
     phrases.push_back("business ");
     for (auto it = phrases.begin(); it != phrases.end(); ++it) {
-        AVLTree a = makeTree(*it, "large_test_file.txt");
-        std::vector<double> inOrderTraversal = a.getInorderTraversal();
+        AVLTree *a = makeTree(*it, "large_test_file");
+        std::vector<double> inOrderTraversal = a->getInorderTraversal();
         for (double timestamp : inOrderTraversal) {
-            std::cout << a.find(timestamp) << std::endl;
-            g.insertVertex(a.find(timestamp));
+            std::cout << a->find(timestamp) << std::endl;
+            g.insertVertex(a->find(timestamp));
         }
+        delete a;
+        a = NULL;
     }
-}
+    // for (const std::vector<std::string> & doc : word1) {
+    //     for (const std:: vector<std::string> & other_doc : word1) {
+    //         if (doc != other_doc && !g.edgeExists(doc[0], other_doc[0])) {
+    //             g.insertEdge(doc[0], other_doc[0]);
+    //         }
+    //     }
+    // }
+    // for (const std::vector<std::string> & doc : word2) {
+    //     for (const std:: vector<std::string> & other_doc : word2) {
+    //         if (doc != other_doc && !g.edgeExists(doc[0], other_doc[0])) {
+    //             g.insertEdge(doc[0], other_doc[0]);
+    //         }
+    //     }
+    // }
+    // for (const std::vector<std::string> & doc : word3) {
+    //     for (const std:: vector<std::string> & other_doc : word3) {
+    //         if (doc != other_doc && !g.edgeExists(doc[0], other_doc[0])) {
+    //             g.insertEdge(doc[0], other_doc[0]);
+    //         }
+    //     }
+    // }
+    // for (const std::vector<std::string> & doc : word4) {
+    //     for (const std:: vector<std::string> & other_doc : word4) {
+    //         if (doc != other_doc && !g.edgeExists(doc[0], other_doc[0])) {
+    //             g.insertEdge(doc[0], other_doc[0]);
+    //         }
+    //     }
+    // }
+
+} 
