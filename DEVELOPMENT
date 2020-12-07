@@ -20,4 +20,7 @@ Now we have to make the graph of multiple sets of results - best of luck to Debo
 ~Matthew
 
 Saturday, December 5th
-
+We all started to plan for the next steps in implementing our graph.
+We decided on a way to fix the problem with our timestamps, which are impossibly small, in order
+to accurately fetch the data used to sort in our AVL trees. Then we started to work on turning
+the data in our AVL tree into a graph using the URL's as nodes. - Emily
