@@ -8,6 +8,7 @@
 #include <queue>
 #include "avltree.h"
 #include "searcher.h"
+#include "graph.h"
 
 
 using namespace std;
@@ -37,7 +38,7 @@ double get_timestamp_seconds(std::string & time_stamp)
     return result;
 }
 
-AVLTree::AVLTree(std::string input, std::string file)
+AVLTree::AVLTree(Graph * g, std::string input, std::string file)
     : root(NULL)
 {
     std::vector<std::vector<std::string> > result = search(input, file);
@@ -47,9 +48,26 @@ AVLTree::AVLTree(std::string input, std::string file)
         //std::cout << "timestamp: " << time_stamp << std::endl;
         this->insert(time_stamp, data[0]);
     }
+    connectGraph(g);
 }
 
+void AVLTree::connectGraph(Graph * g) {
+    connectGraph(g, root);
+}
 
+void AVLTree::connectGraph(Graph * g, AVLTree::Node *& subtree) {
+    if (subtree == NULL) {
+        return;
+    }
+    if (subtree->left != NULL) {
+        g->insertEdge(subtree->url, subtree->left->url);
+        connectGraph(g, subtree->left);
+    }
+    if (subtree->right != NULL) {
+        g->insertEdge(subtree->url, subtree->right->url);
+        connectGraph(g, subtree->right);
+    }
+}
 
 std::string AVLTree::find(double& timestamp) 
 {
@@ -318,7 +336,6 @@ void AVLTree::swap(Node*& first, Node*& second)
     second->timestamp = temptimestamp;
     second->url = tempurl;
 }
- 
 int AVLTree::heightOrNeg1(Node* node)
 {
     if (node == NULL)
@@ -326,14 +343,12 @@ int AVLTree::heightOrNeg1(Node* node)
     else
         return node->height;
 }
- 
 /*void AVLTree::print(std::ostream& out, bool order)
 {
     if(order)
         printFunctionOrder(out);
     printTree(AVLTreeNodeDescriptor<Node>(root), out);
 }*/
- 
 // class for generic printing
  
 /*template <typename Node>
