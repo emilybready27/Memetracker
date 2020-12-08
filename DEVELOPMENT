@@ -38,3 +38,10 @@ Our assumption turned out be right: one of the word outputted immense number of 
 We successfully resolved the issue by utilizing pointers to efficiently use memory space.
 We were successfully able to build  a graph from the data in our AVL tree.
 Our next step would be to implement Dijkstra's algoritm- Zawaadul
+
+Tuesday, December 7th (Part Two)
+
+Emily was able to move all our logic for converting timestamps to comparable doubles into a new AVLTree class constructor.
+I then added a recursive connectGraph function to AVLTree, which gets called from that constructor, and creates directed edges
+between the vertices of a graph that's being passed on. In other words: Operation Go. We are making a graph. Yay!
+We are planning to meet later today to implement the DFS Traversal. - Deborah
