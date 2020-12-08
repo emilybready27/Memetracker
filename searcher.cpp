@@ -14,7 +14,7 @@ std::vector<std::vector<std::string> > search(std::string input, std::string fil
     infile.open (file);
     //Let's begin sifting.
     if (infile.is_open()) {
-        cout<< "Searching..." << endl;
+        cout << "Searching for " << input << "..." << endl;
         vector<std::string> data = std::vector<std::string>();  //Let's make a data vector to store our time and place.
         string line; //And this is the line in the file.
         bool found = false; //This bool helps make sure no duplicates occur.
@@ -44,7 +44,7 @@ std::vector<std::vector<std::string> > search(std::string input, std::string fil
         }
         //After we searched through the whole document, let's print out the results.
         for (vector<string> data: quotes) {
-            cout<<data[0]<<std::endl<<data[1]<<std::endl<<std::endl;
+            //cout<<data[0]<<std::endl<<data[1]<<std::endl<<std::endl;
         }
     }
 

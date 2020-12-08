@@ -7,6 +7,7 @@
 
 using namespace std;
 
+/*
 double get_timestamp_seconds(std::string & time_stamp) {
 
     istringstream timestamp(time_stamp);
@@ -30,8 +31,9 @@ AVLTree *& makeTree(std::string input, std::string file) {
     std::cout << "lol";
     return avltree;
 }
+*/
 
-int main(int argc, const char** argv) {
+int main() {
     // //First, let's get the phrase we want to search for:
     // std::string input;
     // cout<<"Please input the phrase you want to search: " << endl;
@@ -50,16 +52,27 @@ int main(int argc, const char** argv) {
     phrases.push_back("priority");
     phrases.push_back("position");
     phrases.push_back("business ");
+
+    /* Test for one word
+    AVLTree *a = new AVLTree("activity", "large_test_file");
+    std::vector<double> inOrderTraversal = a->getInorderTraversal();
+    for (double timestamp : inOrderTraversal) {
+        std::cout << "URL: " << a->find(timestamp) << std::endl;
+        g.insertVertex(a->find(timestamp));
+    }*/
     for (auto it = phrases.begin(); it != phrases.end(); ++it) {
-        AVLTree *a = makeTree(*it, "large_test_file");
+        AVLTree *a = new AVLTree(*it, "large_test_file");
         std::vector<double> inOrderTraversal = a->getInorderTraversal();
         for (double timestamp : inOrderTraversal) {
-            std::cout << a->find(timestamp) << std::endl;
+            std::cout << "URL: " << a->find(timestamp) << std::endl;
             g.insertVertex(a->find(timestamp));
         }
+        std::cout << std::endl;
         delete a;
         a = NULL;
     }
+
+    
     // for (const std::vector<std::string> & doc : word1) {
     //     for (const std:: vector<std::string> & other_doc : word1) {
     //         if (doc != other_doc && !g.edgeExists(doc[0], other_doc[0])) {

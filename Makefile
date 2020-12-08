@@ -18,10 +18,10 @@ searcher.o : searcher.cpp searcher.h
 	$(CXX) $(CXXFLAGS) searcher.cpp
 
 avltree.o: avltree.h avltree.cpp
-	$(CXX) $< $(CXXFLAGS) avltree.cpp
+	$(CXX) $(CXXFLAGS) avltree.cpp
 
 graph.o: graph.h graph.cpp edge.h
-	$(CXX) $< $(CXXFLAGS) graph.cpp
+	$(CXX) $(CXXFLAGS) graph.cpp
 
 clean :
 	-rm -f *.o $(EXENAME)

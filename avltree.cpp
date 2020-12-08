@@ -7,10 +7,50 @@
  
 #include <queue>
 #include "avltree.h"
+#include "searcher.h"
 
 
 using namespace std;
  
+double get_timestamp_seconds(std::string & time_stamp)
+{
+    // Final time, give in seconds
+    double result = 0;
+
+    // Converting seconds to double, adding to result
+    std::string seconds = time_stamp.substr(17, 18);
+    double secondsDub = std::stod(seconds);
+    result += secondsDub;
+    
+    // Converting minutes to double, adding to result
+    double x = (double) time_stamp.at(14) - 48;
+    double y = (double) time_stamp.at(15) - 48;
+    double minsDub = (10 * x) + y;
+    result += (minsDub * 60);
+    
+    // Converting hours to double, adding to result
+    double a = (double) time_stamp.at(11) - 48;
+    double b = (double) time_stamp.at(12) - 48;
+    double hoursDub = (10 * a) + b;
+    result += (hoursDub * 60 * 60);
+
+    return result;
+}
+
+AVLTree::AVLTree(std::string input, std::string file)
+    : root(NULL)
+{
+    std::vector<std::vector<std::string> > result = search(input, file);
+    //Trees start here
+    for (vector<string> data: result) {
+        double time_stamp = get_timestamp_seconds(data[1]);
+        //std::cout << "timestamp: " << time_stamp << std::endl;
+        this->insert(time_stamp, data[0]);
+    }
+}
+
+
+
 std::string AVLTree::find(double& timestamp) 
 {
     return find(root, timestamp);
@@ -102,7 +142,7 @@ void AVLTree::insert(double & timestamp,  std::string & url)
  
 void AVLTree::insert(Node*& subtree, double& timestamp,  std::string& url)
 {
-    cout << timestamp << endl;
+    //cout << timestamp << endl;
     if (subtree == NULL) {
         subtree = new Node(timestamp, url);
     }
@@ -180,13 +220,13 @@ void AVLTree::remove(Node*& subtree, double& timestamp)
  
  
 AVLTree::AVLTree()
-    : root(NULL), _out(&std::cout)
+    : root(NULL)
 {
  
 }
  
 AVLTree::AVLTree( AVLTree& other)
-    : root(copy(other.root)), _out(&std::cout)
+    : root(copy(other.root))
 {
  
 }
@@ -337,7 +377,7 @@ void AVLTree<K, V>::printFunctionOrder(std::ostream& out) const
     }
 }
  
-/*template <class K, class V>
+template <class K, class V>
 void AVLTree<K, V>::setOutput(std::ostream& newOut)
 {
     _out = &newOut;

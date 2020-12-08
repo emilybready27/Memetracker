@@ -53,6 +53,11 @@ class AVLTree
      * Constructor to create an empty tree.
      */
     AVLTree();
+
+    /**
+     * Custom constructor to create a non-empty tree.
+     */
+    AVLTree(std::string input, std::string file);
  
     /**
      * Copy constructor.
@@ -230,7 +235,7 @@ class AVLTree
     void getPreorderTraversal(Node* subRoot, std::vector<double>& traversal);
  
     /** This variable is used for grading. */
-    std::ostream* _out;
+    //std::ostream* _out;
  
     /** This variable tests the order of function calls **/
     std::vector<std::string> functionCalls;
