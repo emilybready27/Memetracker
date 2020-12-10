@@ -22,6 +22,8 @@
 
 #include <list>
 #include <unordered_map>
+#include <map>
+#include <tuple>
 #include <utility>
 #include <algorithm>
 #include <string>
@@ -214,6 +216,16 @@ public:
     void snapshot();
 
     /**
+     * Creates a DFS traversal of the graph.
+     */
+    std::vector<Vertex> DFS(Vertex start);
+
+    /**
+     * Floyd-Warshall algorithm.
+     */
+    std::map<std::tuple<Vertex, Vertex>, int> floydWarshall();
+
+    /**
      * Prints the graph to stdout.
      */
     void print() const;
@@ -236,7 +248,7 @@ public:
 
 private:
     mutable unordered_map<Vertex, unordered_map<Vertex, Edge>> adjacency_list;
-
+    // std::map<std::pair<Vertex, Vertex>, std::vector<Edge>> paths;
     bool weighted;
     bool directed;
     int picNum;
