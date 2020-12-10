@@ -42,12 +42,12 @@ int main() {
     // std::string file;
     // cout<< "Please input the name of the file that you want to search through: " << endl;
     // cin >> file;
-    Graph g(false);
+    Graph g(true, true);
     std::vector<std::string> phrases;
-    std::vector<std::vector<std::string>> word1 = search("activity" , "large_test_file");
-    std::vector<std::vector<std::string>> word2 = search("priority" , "large_test_file");
-    std::vector<std::vector<std::string>> word3 = search("position" , "large_test_file");
-    std::vector<std::vector<std::string>> word4 = search("business " , "large_test_file");
+    // std::vector<std::vector<std::string>> word1 = search("activity" , "large_test_file");
+    // std::vector<std::vector<std::string>> word2 = search("priority" , "large_test_file");
+    // std::vector<std::vector<std::string>> word3 = search("position" , "large_test_file");
+    // std::vector<std::vector<std::string>> word4 = search("business " , "large_test_file");
     phrases.push_back("activity");
     phrases.push_back("priority");
     phrases.push_back("position");
@@ -60,17 +60,29 @@ int main() {
         std::cout << "URL: " << a->find(timestamp) << std::endl;
         g.insertVertex(a->find(timestamp));
     }*/
+    Vertex start_vertex;
     for (auto it = phrases.begin(); it != phrases.end(); ++it) {
-        AVLTree *a = new AVLTree(*it, "large_test_file");
-        std::vector<double> inOrderTraversal = a->getInorderTraversal();
-        for (double timestamp : inOrderTraversal) {
-            std::cout << "URL: " << a->find(timestamp) << std::endl;
-            g.insertVertex(a->find(timestamp));
+        AVLTree * a = new AVLTree(&g, *it, "large_test_file");
+        std::cout << "height of tree for the word " << *it << " is " << a->getRoot()->height << std::endl;
+        if (*it == "position") {
+            start_vertex = a->getRoot()->url;
+            std::cout << a->getRoot()->url << std::endl;
         }
+        std::vector<double> inOrderTraversal = a->getInorderTraversal();
+        // for (double timestamp : inOrderTraversal) {
+        //     // std::cout << "URL: " << a->find(timestamp) << std::endl;
+        // }
         std::cout << std::endl;
         delete a;
         a = NULL;
     }
+    g.DFS(start_vertex);
+    g.print();
+    std::map<std::tuple<Vertex, Vertex>, int> path_lengths = g.floydWarshall();
+    for (auto it = path_lengths.begin(); it != path_lengths.end(); ++it) {
+        std::cout << "the shortest path between " << std::get<0>(it->first) << " and " << std::get<1>(it->first) << " is " << it->second << std::endl;
+    }
+
 
     
     // for (const std::vector<std::string> & doc : word1) {
