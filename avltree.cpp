@@ -61,10 +61,12 @@ void AVLTree::connectGraph(Graph * g, AVLTree::Node *& subtree) {
     }
     if (subtree->left != NULL) {
         g->insertEdge(subtree->url, subtree->left->url);
+        g->setEdgeWeight(subtree->url, subtree->left->url, int(subtree->timestamp - subtree->left->timestamp));
         connectGraph(g, subtree->left);
     }
     if (subtree->right != NULL) {
         g->insertEdge(subtree->url, subtree->right->url);
+        g->setEdgeWeight(subtree->url, subtree->right->url, int(subtree->right->timestamp - subtree->timestamp));
         connectGraph(g, subtree->right);
     }
 }
