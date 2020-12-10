@@ -1,4 +1,8 @@
 #include "graph.h"
+#include <map>
+#include <tuple>
+#include <set>
+#include <stack>
 
 const Vertex Graph::InvalidVertex = "_CS225INVALIDVERTEX";
 const int Graph::InvalidWeight = INT_MIN;
@@ -308,8 +312,8 @@ bool Graph::assertEdgeExists(Vertex source, Vertex destination, string functionN
         return false;
     if(adjacency_list[source].find(destination)== adjacency_list[source].end())
     {
-        if (functionName != "")
-            error(functionName + " called on nonexistent edge " + source + " -> " + destination);
+        // if (functionName != "")
+        //     error(functionName + " called on nonexistent edge " + source + " -> " + destination);
         return false;
     }
 
@@ -319,8 +323,8 @@ bool Graph::assertEdgeExists(Vertex source, Vertex destination, string functionN
             return false;
         if(adjacency_list[destination].find(source)== adjacency_list[destination].end())
         {
-            if (functionName != "")
-                error(functionName + " called on nonexistent edge " + destination + " -> " + source);
+            // if (functionName != "")
+            //     error(functionName + " called on nonexistent edge " + destination + " -> " + source);
             return false;
         }
     }
@@ -337,6 +341,58 @@ void Graph::clear()
     adjacency_list.clear();
 }
 
+std::map<std::tuple<Vertex, Vertex>, int> Graph::floydWarshall() {
+    /* shortest_paths is a map from order pair of vertices to an integer weight (edge weight) */
+    // Vertex dist[getVertices().size()][getVertices().size()];
+    std::map<std::tuple<Vertex, Vertex>, int> shortest_paths;
+    std::vector<Vertex> v = getVertices();
+    std::vector<Edge> e = getEdges();
+ 
+    // for (int i = 0; i < getEdges().size(); i++) {
+    //     // for each edge, add the weight of that edge to our map
+    //     std::tuple<Vertex, Vertex> vertices(getEdges()[i].source, getEdges()[i].dest);
+    //     shortest_paths[vertices] = getEdges()[i].getWeight();
+    // }
+    for (unsigned long i = 0; i < v.size(); i++) {
+        for (unsigned long j = 0; j < v.size(); j++) {
+            std::tuple<Vertex, Vertex> * vertices = new std::tuple<Vertex, Vertex>(v[i], v[j]);
+            if (v[i] != v[j] && assertEdgeExists(v[i], v[j], "floydWarshall")) {
+                shortest_paths[*vertices] = e[i].getWeight();
+            }
+            delete vertices;
+        }
+    }
+    /* Add all vertices one by one to the set of intermediate vertices.
+      ---> Before start of a iteration, we have shortest distances between all
+      pairs of vertices such that the shortest distances consider only the
+      vertices in set {0, 1, 2, .. k-1} as intermediate vertices.
+      ----> After the end of a iteration, vertex no. k is added to the set of
+      intermediate vertices and the set becomes {0, 1, 2, .. k} */
+    for (unsigned long k = 0; k < v.size(); k++) {
+        // Pick all vertices as source one by one
+        for (unsigned long i = 0; i < v.size(); i++) {
+            // Pick all vertices as destination for the
+            // above picked source
+            for (unsigned long j = 0; j < v.size(); j++) {
+                std::tuple<Vertex, Vertex> * ik = new std::tuple<Vertex, Vertex>(v[i], v[k]);
+                std::tuple<Vertex, Vertex> * ij = new std::tuple<Vertex, Vertex>(v[i], v[j]);
+                std::tuple<Vertex, Vertex> * kj = new std::tuple<Vertex, Vertex>(v[k], v[j]);
+                if (shortest_paths.find(*ik) != shortest_paths.end() 
+                    && shortest_paths.find(*ij) != shortest_paths.end()
+                    && shortest_paths.find(*kj) != shortest_paths.end()
+                    && shortest_paths[*ik] + shortest_paths[*kj] < shortest_paths[*ij]) {
+                        shortest_paths[*ij] = shortest_paths[*ik] + shortest_paths[*kj];
+                    }
+                // If vertex k is on the shortest path from
+                // i to j, then update the value of dist[i][j]
+                delete ik;
+                delete ij;
+                delete kj;
+            }
+        }
+    }
+    return shortest_paths;
+}
 
 /**
  * Prints a graph error and quits the program.
@@ -396,6 +452,37 @@ void Graph::print() const
     }
 }
 
+std::vector<Vertex> Graph::DFS(Vertex start) {
+    // create set of references to visited vertices
+    std::set<Vertex> visited;
+    std::vector<Vertex> to_return;
+    // create stack of references to UNVISITED vertices
+    std::stack<Vertex> stack;
+    Vertex curr_vertex;
+    stack.push(start);
+    visited.insert(start);
+    to_return.push_back(start);
+    while (!stack.empty()) {
+        // 1. current vertex = stack.pop();
+        curr_vertex = stack.top();
+        stack.pop();
+        // 2. do whatever with it (print it probably)
+        std::cout << curr_vertex << std::endl;
+        // 3. for each neighbor of the current vertex:
+        for (const Vertex & neighbor : getAdjacent(curr_vertex)) {
+            // - if neighbor is not in visited,
+            if (visited.find(neighbor) == visited.end()) {
+                // - stack.push(neighbor)
+                stack.push(neighbor);
+                // - visited.add(neighbor)
+                visited.insert(neighbor);
+                to_return.push_back(neighbor);
+            }
+        }
+    }
+    return to_return;
+}
+
 /**
  * Saves the graph as a PNG image.
  * @param title - the filename of the PNG image
@@ -403,7 +490,7 @@ void Graph::print() const
 void Graph::savePNG(string title) const
 {
     std::ofstream neatoFile;
-    string filename = "images/" + title + ".dot";
+    string filename = title + ".png";
     neatoFile.open(filename.c_str());
 
     if (!neatoFile.good())
@@ -419,12 +506,14 @@ void Graph::savePNG(string title) const
 
     vector<Vertex> allv = getVertices();
     //lambda expression
-    sort(allv.begin(), allv.end(), [](const Vertex& lhs, const Vertex& rhs) {
-        return stoi(lhs.substr(3)) > stoi(rhs.substr(3));
-    });
+    // sort(allv.begin(), allv.end(), [](const Vertex& lhs, const Vertex& rhs) {
+    //     return stoi(lhs.substr(3)) > stoi(rhs.substr(3));
+    // });
+    std::cout << "reached line " << __LINE__ << std::endl;
 
     int xpos1 = 100;
     int xpos2 = 100;
+    std::cout << "reached line " << __LINE__ << std::endl;
     int xpos, ypos;
     for (auto it : allv) {
         string current = it;
@@ -445,8 +534,10 @@ void Graph::savePNG(string title) const
         neatoFile << "[pos=\""<< xpos << "," << ypos <<"\"]";
         neatoFile << ";\n";
     }
+    std::cout << "reached line " << __LINE__ << std::endl;
 
     neatoFile << "\tedge [penwidth=\"1.5\", fontsize=\"7.0\"];\n";
+    std::cout << "reached line " << __LINE__ << std::endl;
 
     for (auto it = adjacency_list.begin(); it != adjacency_list.end(); ++it) 
     {
@@ -475,12 +566,16 @@ void Graph::savePNG(string title) const
             neatoFile<< "[constraint = \"false\"]" << ";\n";
         }
     }
+    std::cout << "reached line " << __LINE__ << std::endl;
 
     neatoFile << "}";
     neatoFile.close();
+    std::cout << "reached line " << __LINE__ << std::endl;
     string command = "neato -n -Tpng " + filename + " -o " + "images/" + title
                      + ".png 2> /dev/null";
+    std::cout << "reached line " << __LINE__ << std::endl;
     int result = system(command.c_str());
+    std::cout << "reached line " << __LINE__ << std::endl;
 
 
     if (result == 0) {
@@ -488,7 +583,9 @@ void Graph::savePNG(string title) const
     } else {
         cout << "Failed to generate visual output graph using `neato`. Install `graphviz` or `neato` to generate a visual graph." << endl;
     }
+    std::cout << "reached line " << __LINE__ << std::endl;
 
     string rmCommand = "rm -f " + filename + " 2> /dev/null";
+    std::cout << "reached line " << __LINE__ << std::endl;
     system(rmCommand.c_str());
 }
