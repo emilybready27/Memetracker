@@ -50,6 +50,7 @@ class AVLTree
     };
  
   public:
+
     /**
      * Constructor to create an empty tree.
      */
@@ -82,6 +83,10 @@ class AVLTree
      * Frees all nodes associated with this tree and sets it to be empty.
      */
     void clear();
+
+    Node * getRoot() {
+      return root;
+    }
  
     /**
      * Inserts a key and value into the AVLTree.
@@ -139,6 +144,7 @@ class AVLTree
      * The root of the tree.
      */
     Node* root;
+    
  
     /**
      * Private helper function for the public #insert function.
