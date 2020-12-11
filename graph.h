@@ -240,6 +240,8 @@ public:
 
     void clear();
 
+    double Centrality(Vertex &v);
+
 
     const static Vertex InvalidVertex;
     const static Edge InvalidEdge;
@@ -253,6 +255,8 @@ private:
     bool directed;
     int picNum;
     string picName;
+    double total_paths;
+    std::map<Vertex, double> number_shortest_path_vertex;
 
 
     /**

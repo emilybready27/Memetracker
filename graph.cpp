@@ -17,65 +17,6 @@ Graph::Graph(bool weighted, bool directed) : weighted(weighted),directed(directe
 {
 }
 
-// // Graph::Graph(bool weighted, int numVertices, unsigned long seed)
-//     :weighted(weighted),
-//       directed(false),
-//      random(Random(seed)) 
-// {
-//     if (numVertices < 2)
-//     {
-//      error("numVertices too low");
-//      exit(1);
-//     }
-
-//     vector<Vertex> vertices;
-//     for (int i = 0; i < numVertices; i++)
-//     {
-//         insertVertex(to_string(i));
-//         vertices.push_back(to_string(i));
-//     }
-
-//     // make sure all vertices are connected
-//     random.shuffle(vertices);
-//     Vertex cur = vertices[0];
-//     for (size_t i = 0; i < vertices.size() - 1; ++i)
-//     {
-//         Vertex next = vertices[i + 1];
-//         insertEdge(cur, next);
-//         if (weighted) 
-//         {
-//             int weight = random.nextInt();
-//             setEdgeWeight(cur, next, weight);
-//         }
-//         cur = next;
-//     }
-
-//     // keep the graph from being overpopulated with edges,
-//     //  while still maintaining a little randomness
-//     int numFailures = 0;
-//     int idx = 0;
-//     random.shuffle(vertices);
-//     while (numFailures < 2) 
-//     {
-//         if (!insertEdge(vertices[idx], vertices[idx + 1])) 
-//         {
-//             ++numFailures;
-//         } 
-//         else 
-//         {
-//             // if insertEdge() succeeded...
-//             if (weighted)
-//                 setEdgeWeight(vertices[idx], vertices[idx + 1],
-//                               random.nextInt());
-//             ++idx;
-//             if (idx >= numVertices - 2) 
-//             {
-//                 idx = 0;
-//                 random.shuffle(vertices);
-//             }
-//         }
-//     }
-// }
 
 vector<Vertex> Graph::getAdjacent(Vertex source) const 
 {
@@ -282,7 +223,6 @@ Edge Graph::setEdgeWeight(Vertex source, Vertex destination, int weight)
     if (assertEdgeExists(source, destination, __func__) == false)
         return InvalidEdge;
     Edge e = adjacency_list[source][destination];
-    //std::cout << "setting weight: " << weight << std::endl;
     Edge new_edge(source, destination, weight, e.getLabel());
     adjacency_list[source][destination] = new_edge;
 
@@ -312,8 +252,7 @@ bool Graph::assertEdgeExists(Vertex source, Vertex destination, string functionN
         return false;
     if(adjacency_list[source].find(destination)== adjacency_list[source].end())
     {
-        // if (functionName != "")
-        //     error(functionName + " called on nonexistent edge " + source + " -> " + destination);
+       
         return false;
     }
 
@@ -323,8 +262,7 @@ bool Graph::assertEdgeExists(Vertex source, Vertex destination, string functionN
             return false;
         if(adjacency_list[destination].find(source)== adjacency_list[destination].end())
         {
-            // if (functionName != "")
-            //     error(functionName + " called on nonexistent edge " + destination + " -> " + source);
+            
             return false;
         }
     }
@@ -343,16 +281,10 @@ void Graph::clear()
 
 std::map<std::tuple<Vertex, Vertex>, int> Graph::floydWarshall() {
     /* shortest_paths is a map from order pair of vertices to an integer weight (edge weight) */
-    // Vertex dist[getVertices().size()][getVertices().size()];
     std::map<std::tuple<Vertex, Vertex>, int> shortest_paths;
     std::vector<Vertex> v = getVertices();
     std::vector<Edge> e = getEdges();
  
-    // for (int i = 0; i < getEdges().size(); i++) {
-    //     // for each edge, add the weight of that edge to our map
-    //     std::tuple<Vertex, Vertex> vertices(getEdges()[i].source, getEdges()[i].dest);
-    //     shortest_paths[vertices] = getEdges()[i].getWeight();
-    // }
     for (unsigned long i = 0; i < v.size(); i++) {
         for (unsigned long j = 0; j < v.size(); j++) {
             std::tuple<Vertex, Vertex> * vertices = new std::tuple<Vertex, Vertex>(v[i], v[j]);
@@ -369,6 +301,7 @@ std::map<std::tuple<Vertex, Vertex>, int> Graph::floydWarshall() {
       ----> After the end of a iteration, vertex no. k is added to the set of
       intermediate vertices and the set becomes {0, 1, 2, .. k} */
     for (unsigned long k = 0; k < v.size(); k++) {
+        int count = 0;
         // Pick all vertices as source one by one
         for (unsigned long i = 0; i < v.size(); i++) {
             // Pick all vertices as destination for the
@@ -377,21 +310,41 @@ std::map<std::tuple<Vertex, Vertex>, int> Graph::floydWarshall() {
                 std::tuple<Vertex, Vertex> * ik = new std::tuple<Vertex, Vertex>(v[i], v[k]);
                 std::tuple<Vertex, Vertex> * ij = new std::tuple<Vertex, Vertex>(v[i], v[j]);
                 std::tuple<Vertex, Vertex> * kj = new std::tuple<Vertex, Vertex>(v[k], v[j]);
-                if (shortest_paths.find(*ik) != shortest_paths.end() 
-                    && shortest_paths.find(*ij) != shortest_paths.end()
-                    && shortest_paths.find(*kj) != shortest_paths.end()
-                    && shortest_paths[*ik] + shortest_paths[*kj] < shortest_paths[*ij]) {
+                if (shortest_paths.find(*ij) != shortest_paths.end()) {
+                    if (shortest_paths.find(*ik) != shortest_paths.end() && shortest_paths.find(*kj) != shortest_paths.end() && shortest_paths[*ik] + shortest_paths[*kj] < shortest_paths[*ij]) {
+                        count++;
                         shortest_paths[*ij] = shortest_paths[*ik] + shortest_paths[*kj];
+                        
                     }
-                // If vertex k is on the shortest path from
-                // i to j, then update the value of dist[i][j]
+
+                } else {
+                    if (shortest_paths.find(*ik) != shortest_paths.end() && shortest_paths.find(*kj) != shortest_paths.end()) {
+                        count++;
+                        shortest_paths[*ij] = shortest_paths[*ik] + shortest_paths[*kj];
+                        
+
+                    }
+                }
+
                 delete ik;
                 delete ij;
                 delete kj;
             }
         }
+        number_shortest_path_vertex[v[k]] = count;
+
     }
+    total_paths = shortest_paths.size();
     return shortest_paths;
+}
+
+double Graph::Centrality(Vertex &v) {
+    double num_short_paths = number_shortest_path_vertex[v];
+    std::cout <<" Number of shortest paths for "  << v << " are " << num_short_paths << endl;
+    std::cout <<" Number of total paths  are: " << total_paths << endl;
+    double centrality = num_short_paths/total_paths;
+    std::cout <<" Centrality for " <<  v << " is : "<< centrality << endl;
+    return centrality;
 }
 
 /**
