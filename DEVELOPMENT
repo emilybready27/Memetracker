@@ -50,3 +50,9 @@ Wednesday, December 9th
 
 We met Tuesday night and Wednesday night and were able to get a DFS traversal and the Floyd Warshall algorithm implemented.
 We plan to meet tomorrow to finish implementing the last algorithm on our list. - Deborah
+
+Thursday, December 10th
+
+After implementation of our Centrality algorithm, we realized that there was issue with our Floyd Warshall algorithm, which we managed to fix after pensive debugging.
+Successfully completed Centrality and Floyd Warshall algorithm, where our program now outputs the centrality of each vertex accurately.
+We plan to meet tomorrow to record a demo of our application. - Zawaadul
