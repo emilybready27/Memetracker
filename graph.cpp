@@ -280,7 +280,6 @@ void Graph::clear()
 }
 
 std::map<std::tuple<Vertex, Vertex>, int> Graph::floydWarshall() {
-    /* shortest_paths is a map from order pair of vertices to an integer weight (edge weight) */
     std::map<std::tuple<Vertex, Vertex>, int> shortest_paths;
     std::vector<Vertex> v = getVertices();
     std::vector<Edge> e = getEdges();
@@ -294,18 +293,10 @@ std::map<std::tuple<Vertex, Vertex>, int> Graph::floydWarshall() {
             delete vertices;
         }
     }
-    /* Add all vertices one by one to the set of intermediate vertices.
-      ---> Before start of a iteration, we have shortest distances between all
-      pairs of vertices such that the shortest distances consider only the
-      vertices in set {0, 1, 2, .. k-1} as intermediate vertices.
-      ----> After the end of a iteration, vertex no. k is added to the set of
-      intermediate vertices and the set becomes {0, 1, 2, .. k} */
+    
     for (unsigned long k = 0; k < v.size(); k++) {
         int count = 0;
-        // Pick all vertices as source one by one
         for (unsigned long i = 0; i < v.size(); i++) {
-            // Pick all vertices as destination for the
-            // above picked source
             for (unsigned long j = 0; j < v.size(); j++) {
                 std::tuple<Vertex, Vertex> * ik = new std::tuple<Vertex, Vertex>(v[i], v[k]);
                 std::tuple<Vertex, Vertex> * ij = new std::tuple<Vertex, Vertex>(v[i], v[j]);
@@ -344,7 +335,12 @@ double Graph::Centrality(Vertex &v) {
     std::cout <<" Number of total paths  are: " << total_paths << endl;
     double centrality = num_short_paths/total_paths;
     std::cout <<" Centrality for " <<  v << " is : "<< centrality << endl;
-    return centrality;
+    if (centrality < 0 || centrality > 1) {
+        std::cout << "Invalid value for centrality of " <<  v << endl;
+        return -1;
+    } else {
+        return centrality;
+    }
 }
 
 /**
